@@ -188,7 +188,8 @@ class UserController extends Controller
         $cache_token = Redis::get($redis_token_key);
         if ($token == $cache_token)        // token 有效
         {
-            $data     = date("Y-m-d H:i:s");
+            // $data     = date("Y-m-d H:i:s");
+            $data     = UserModel::get();
             $response = [
                 'err_num' => 6000,
                 'err_msg' => 'ok',
