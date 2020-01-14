@@ -20,8 +20,11 @@ class UserController extends Controller
 
         // 验证两次输入的密码是否一致
         if ($pass1 != $pass2) {
-            echo "两次密码输入不一致";
-            die;
+            $response = [
+                'err_num' => 9009,
+                'err_msg'   => "两次输入的密码不一致"
+            ];
+            die(json_encode($response,JSON_UNESCAPED_UNICODE));
         }
 
         $name   = $request->input('name');
@@ -175,7 +178,7 @@ class UserController extends Controller
         if (empty($_SERVER['HTTP_TOKEN']) || empty($_SERVER['HTTP_UID'])) {
             $response = [
                 'err_num' => 6003,
-                'err_msg' => 'Token Not Valid!'
+                'err_msg' => 'Need Token or Uid!'
             ];
             return $response;
         }
@@ -199,6 +202,38 @@ class UserController extends Controller
             $response = [
                 'err_num' => 6003,
                 'err_msg' => 'Token Not Valid!'
+            ];
+        }
+        return $response;
+    }
+
+    /**
+     * 接口鉴权
+     */
+    public function auth()
+    {
+        $uid = $_POST['uid'];
+        $token = $_POST['token'];
+        if(empty($_POST['uid']) || empty($_POST['token'])){
+            $response = [
+                'err_num' => 5003,
+                'err_msg'   => 'Need token or uid'
+            ];
+            return $response;
+        }
+        $redis_token_key = 'str:user:token:'.$uid;
+        //验证token是否有效
+        $cache_token = Redis::get($redis_token_key);
+        if($token==$cache_token)        // token 有效
+        {
+            $response = [
+                'err_num' => 0,
+                'err_msg'   => 'ok'
+            ];
+        }else{
+            $response = [
+                'err_num' => 5003,
+                'err_msg'   => 'Token Not Valid!'
             ];
         }
         return $response;
