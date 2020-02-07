@@ -18,4 +18,4 @@ Route::get('/', function () {
 Route::post('user/reg','User\UserController@reg');     //注册
 Route::post('user/login','User\UserController@login'); // 登录
 Route::get('user/info','User\UserController@userInfo'); // 获取用户信息
-Route::post('/api/auth','User\UserController@auth'); // 鉴权
+Route::post('user/auth','User\UserController@auth'); // 鉴权
