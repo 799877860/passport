@@ -187,8 +187,10 @@ class UserController extends Controller
         $token           = $_SERVER['HTTP_TOKEN'];
         $uid             = $_SERVER['HTTP_UID'];
         $redis_token_key = 'str:user:token:' . $uid;
+        //echo $redis_token_key;echo '</br>';
         //验证token是否有效
         $cache_token = Redis::get($redis_token_key);
+        //var_dump($cache_token);die;
         if ($token == $cache_token)        // token 有效
         {
             // $data     = date("Y-m-d H:i:s");
